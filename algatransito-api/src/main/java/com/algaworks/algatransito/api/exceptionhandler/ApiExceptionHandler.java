@@ -5,6 +5,7 @@ import java.net.URI;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -23,6 +24,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemDetail problemDetail = ProblemDetail.forStatus(status);
 		problemDetail.setTitle("Um ou mais campos estão inválidos");
 		problemDetail.setType(URI.create("https://algatransito.com/erros/campos-invalidos"));
+		
+        ex.getBindingResult().getAllErrors()
+				.stream()
+				.forEach(ObjectError -> 
+				        System.out.println(((FieldError) ObjectError).getField()
+				           + " - " + ObjectError.getDefaultMessage()));
 
 		return handleExceptionInternal(ex, problemDetail, headers, status, request);
 	}
