@@ -1,7 +1,10 @@
 package com.algaworks.algatransito.api.exceptionhandler;
 
 import java.net.URI;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -22,22 +25,22 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			                                                      org.springframework.http.HttpHeaders headers, HttpStatusCode status,
 			                                                      WebRequest request) {
 		ProblemDetail problemDetail = ProblemDetail.forStatus(status);
-		problemDetail.setTitle("Um ou mais campos estão inválidos");
-		problemDetail.setType(URI.create("https://algatransito.com/erros/campos-invalidos"));
-		
-        ex.getBindingResult().getAllErrors()
-				.stream()
-				.forEach(ObjectError -> 
-				        System.out.println(((FieldError) ObjectError).getField()
-				           + " - " + ObjectError.getDefaultMessage()));
+        problemDetail.setTitle("Um ou mais campos estão inválidos");
+        problemDetail.setType(URI.create("https://algatransito.com/erros/campos-invalidos"));
 
-		return handleExceptionInternal(ex, problemDetail, headers, status, request);
-	}
+        Map<String, String> fields = ex.getBindingResult().getAllErrors()
+                .stream()
+                .collect(Collectors.toMap(objectError -> ((FieldError) objectError).getField(),
+                        DefaultMessageSourceResolvable::getDefaultMessage));
 
-	@ExceptionHandler(NegocioException.class)
-	public ResponseEntity<String> capturar(NegocioException e) {
-		return ResponseEntity.badRequest().body(e.getMessage());
+        problemDetail.setProperty("fields", fields);
 
-	}
+        return handleExceptionInternal(ex, problemDetail, headers, status, request);
+    }
+
+    @ExceptionHandler(NegocioException.class)
+    public ResponseEntity<String> capturar(NegocioException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
 
 }
