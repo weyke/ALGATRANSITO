@@ -1,6 +1,6 @@
 package com.algaworks.algatransito.domain.model;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import com.algaworks.algatransito.domain.validation.ValidationGroups;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -55,9 +55,9 @@ public class Veiculo {
 	    private StatusVeiculo status;
 
 	    @JsonProperty(access = Access.READ_ONLY)
-	    private LocalDateTime dataCadastro;
+	    private OffsetDateTime dataCadastro;
 
 	    @JsonProperty(access = Access.READ_ONLY)
-	    private LocalDateTime dataApreensao;
+	    private OffsetDateTime dataApreensao;
 
 	}
