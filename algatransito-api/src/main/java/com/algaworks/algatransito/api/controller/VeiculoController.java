@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algatransito.api.assembler.VeiculoAssembler;
 import com.algaworks.algatransito.api.model.VeiculoModel;
+import com.algaworks.algatransito.api.model.Input.VeiculoInput;
 import com.algaworks.algatransito.domain.model.Veiculo;
 import com.algaworks.algatransito.domain.repository.VeiculoRepository;
 import com.algaworks.algatransito.domain.service.RegistroVeiculoService;
@@ -47,8 +48,11 @@ public class VeiculoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public VeiculoModel cadastrar(@Valid @RequestBody Veiculo veiculo) {
-        return veiculoAssembler.toModel(registroVeiculoService.cadastrar(veiculo));
+    public VeiculoModel cadastrar(@Valid @RequestBody VeiculoInput veiculoInput) {
+    	Veiculo novoVeiculo = veiculoAssembler.toEntity(veiculoInput);
+    	Veiculo veiculoCadastrado= registroVeiculoService.cadastrar(novoVeiculo);
+    	
+    	return veiculoAssembler.toModel(veiculoCadastrado);
     }
 
 }

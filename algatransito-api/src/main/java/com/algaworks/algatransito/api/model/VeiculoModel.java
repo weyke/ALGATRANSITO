@@ -4,12 +4,10 @@ import java.time.OffsetDateTime;
 
 import com.algaworks.algatransito.domain.model.StatusVeiculo;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 
-@Getter
-@Setter
+@Data
 public class VeiculoModel {
 
 	 private Long id;
