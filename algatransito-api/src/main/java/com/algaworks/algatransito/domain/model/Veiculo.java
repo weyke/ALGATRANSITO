@@ -1,6 +1,8 @@
 package com.algaworks.algatransito.domain.model;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.algaworks.algatransito.domain.validation.ValidationGroups;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,6 +15,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -59,5 +62,18 @@ public class Veiculo {
 
 	    @JsonProperty(access = Access.READ_ONLY)
 	    private OffsetDateTime dataApreensao;
+	    
+	    @OneToMany(mappedBy = "veiculo")
+	    private List<Autuacao>autuacaos = new ArrayList<>();
+ 	    
+	    
+	    public Autuacao adicionarAutuacao(Autuacao autuacao) {
+	    	autuacao.setDataOcorrorrencia(OffsetDateTime.now());
+	    	autuacao.setVeiculo(this);
+	    	getAutuacaos().add(autuacao);
+	    	return autuacao;
+	    }
 
 	}
+
+

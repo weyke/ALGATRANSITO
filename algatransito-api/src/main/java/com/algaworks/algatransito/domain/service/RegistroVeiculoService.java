@@ -17,31 +17,34 @@ import lombok.AllArgsConstructor;
 @Service
 public class RegistroVeiculoService {
 
-    private final VeiculoRepository veiculoRepository;
-    private final RegistroProprietarioService registroProprietarioService;
+	private final VeiculoRepository veiculoRepository;
+	private final RegistroProprietarioService registroProprietarioService;
 
-    @Transactional
-    public Veiculo cadastrar(Veiculo novoVeiculo) {
-        if (novoVeiculo.getId() != null) {
-            throw new NegocioException("Veículo a ser cadastrado não deve possuir um código");
-        }
+	public Veiculo buscar(Long veiculoId) {
+		return veiculoRepository.findById(veiculoId).orElseThrow(() -> new NegocioException("veiculo não encontrado"));
 
-        boolean placaEmUso = veiculoRepository.findByPlaca(novoVeiculo.getPlaca())
-                .filter(veiculo -> !veiculo.equals(novoVeiculo))
-                .isPresent();
+	}
 
-        if (placaEmUso) {
-            throw new NegocioException("Já existe um veículo cadastrado com esta placa");
-        }
+	@Transactional
+	public Veiculo cadastrar(Veiculo novoVeiculo) {
+		if (novoVeiculo.getId() != null) {
+			throw new NegocioException("Veículo a ser cadastrado não deve possuir um código");
+		}
 
-        Proprietario proprietario = registroProprietarioService.buscar(novoVeiculo.getProprietario().getId());
-     
+		boolean placaEmUso = veiculoRepository.findByPlaca(novoVeiculo.getPlaca())
+				.filter(veiculo -> !veiculo.equals(novoVeiculo)).isPresent();
 
-        novoVeiculo.setProprietario(proprietario);
-        novoVeiculo.setStatus(StatusVeiculo.REGULAR);
-        novoVeiculo.setDataCadastro(OffsetDateTime.now());
+		if (placaEmUso) {
+			throw new NegocioException("Já existe um veículo cadastrado com esta placa");
+		}
 
-        return veiculoRepository.save(novoVeiculo);
-    }
+		Proprietario proprietario = registroProprietarioService.buscar(novoVeiculo.getProprietario().getId());
+
+		novoVeiculo.setProprietario(proprietario);
+		novoVeiculo.setStatus(StatusVeiculo.REGULAR);
+		novoVeiculo.setDataCadastro(OffsetDateTime.now());
+
+		return veiculoRepository.save(novoVeiculo);
+	}
 
 }
