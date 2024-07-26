@@ -11,16 +11,12 @@ import lombok.Data;
 public class VeiculoModel {
 
 	 private Long id;
-	 private String nomeProprietario;
-	 private String marca;
-	 private String modelo;
-	 private String placa;
-	 private StatusVeiculo status;
-	 private OffsetDateTime dataCadastro;
-	 private OffsetDateTime dataApreensao;
-	 
-	 
-	
-	
+	    private ProprietarioResumoModel proprietario;
+	    private String marca;
+	    private String modelo;
+	    private String numeroPlaca;
+	    private StatusVeiculo status;
+	    private OffsetDateTime dataCadastro;
+	    private OffsetDateTime dataApreensao;
 
-}
+	}

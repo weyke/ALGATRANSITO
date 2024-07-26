@@ -8,6 +8,7 @@ import com.algaworks.algatransito.domain.validation.ValidationGroups;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -63,7 +64,7 @@ public class Veiculo {
 	    @JsonProperty(access = Access.READ_ONLY)
 	    private OffsetDateTime dataApreensao;
 	    
-	    @OneToMany(mappedBy = "veiculo")
+	    @OneToMany(mappedBy = "veiculo", cascade = CascadeType.ALL)
 	    private List<Autuacao>autuacaos = new ArrayList<>();
  	    
 	    

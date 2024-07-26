@@ -16,7 +16,7 @@ import lombok.AllArgsConstructor;
 public class VeiculoAssembler {
 
 	private final ModelMapper modelMapper;
-	
+
 	public Veiculo toEntity(VeiculoInput veiculoInput) {
 		return modelMapper.map(veiculoInput, Veiculo.class);
 	}
@@ -26,10 +26,7 @@ public class VeiculoAssembler {
 	}
 
 	public List<VeiculoModel> toCollectionModel(List<Veiculo> veiculos) {
-
-		return veiculos.stream()
-
-				.map(this::toModel).toList();
+		return veiculos.stream().map(this::toModel).toList();
 	}
 
 }
