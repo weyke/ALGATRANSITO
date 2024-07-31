@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.algaworks.algatransito.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algatransito.domain.exception.NegocioException;
 
 import lombok.AllArgsConstructor;
@@ -49,6 +50,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
 		problemDetail.setTitle(e.getMessage());
 		problemDetail.setType(URI.create("https://algatransito.com/erros/regra-de-negocio"));
+
+		return problemDetail;
+
+	}
+	
+	@ExceptionHandler(EntidadeNaoEncontradaException.class)
+	public ProblemDetail handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException e) {
+		ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
+		problemDetail.setTitle(e.getMessage());
+		problemDetail.setType(URI.create("https://algatransito.com/erros/nao-encontrado"));
 
 		return problemDetail;
 
